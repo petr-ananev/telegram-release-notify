@@ -48,6 +48,27 @@ cp .env.example .env
 
 ## Использование
 
+### Вариант 1: Интерактивный бот
+
+```bash
+python bot.py
+```
+
+В Telegram напиши команду `/release` боту и следуй его подсказкам:
+1. Укажи среду (QA, PROD, etc)
+2. Укажи версию релиза (26.1.0)
+3. Укажи номер RC (7)
+4. Укажи commits через пробел или запятую
+
+Бот автоматически:
+- Извлечёт тикеты из commits
+- Получит информацию через JIRA API
+- Поменяет статусы и assignee
+- Отправит сообщение в чат релизов
+- Покажет результаты в текущем чате
+
+### Вариант 2: CLI скрипт
+
 ```bash
 python release_notify.py <environment> <release> <rc> <commit1> [commit2 ...]
 ```
@@ -59,7 +80,7 @@ python release_notify.py <environment> <release> <rc> <commit1> [commit2 ...]
 | `rc`          | Номер release candidate |
 | `commit...`   | Один или несколько коммитов в формате `hash(Type TICKET-123 Description)` |
 
-Пример запуска скрипта:
+Пример запуска:
 
 ```bash
 python release_notify.py QA 26.1.0 7 \
@@ -67,11 +88,7 @@ python release_notify.py QA 26.1.0 7 \
   "def67890(BugFix DEV-67890 Fix something else)"
 ```
 
-Скрипт:
-1. Извлечёт тикеты DEV-12345 и DEV-67890
-2. Получит их информацию через JIRA API
-3. Поменяет статусы и assignee
-4. Отправит сообщение в Telegram
+Скрипт выведет результаты в консоль и отправит сообщение в Telegram.
 
 ## Пример сообщения в Telegram
 
@@ -87,10 +104,13 @@ DEV-67890 - Update user profile page layout
 
 ```
 .
-├── release_notify.py      # основной скрипт
+├── bot.py                  # интерактивный Telegram бот
+├── release_notify.py       # CLI скрипт
+├── release_notifier.py     # основная логика (JIRA API, Telegram, workflow)
 ├── workflow_matrix.json    # матрица переходов между статусами
 ├── .env                    # секреты (не коммитится)
 ├── .env.example            # шаблон .env
+├── requirements.txt        # зависимости
 ├── .gitignore
 └── README.md
 ```
