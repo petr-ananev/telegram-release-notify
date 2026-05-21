@@ -21,4 +21,3 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "bot.py,release_notifier.py,requirements.txt,workflow_matrix.json"
           target: "/opt/telegram-release-notify"
-          strip_components: 1
