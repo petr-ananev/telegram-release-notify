@@ -11,6 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Debug
+        run: |
+          echo "Key exists: ${{ secrets.SERVER_SSH_KEY != '' }}"
+          echo "Key length: $(echo '${{ secrets.SERVER_SSH_KEY }}' | wc -c)"
+          echo "First 50 chars: $(echo '${{ secrets.SERVER_SSH_KEY }}' | head -c 50)"
+
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.7
         with:
