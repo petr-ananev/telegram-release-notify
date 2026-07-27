@@ -1,9 +1,12 @@
 .env
-browser_session/
-__pycache__/
 *.pyc
 .claude
+.DS_Store
+browser_session/
+__pycache__/
 .superpowers/
 .idea/
 build/
 dist/
+node_modules/
+coverage/
