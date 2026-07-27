@@ -210,6 +210,9 @@ export function appendLog(line) {
     log.textContent += line + '\n';
     log.scrollTop = log.scrollHeight;
 }
+// app.js грузится как ES-модуль (type="module"), поэтому функции не попадают
+// в глобальную область. Python дёргает appendLog через evaluate_js — вешаем на window.
+if (typeof window !== 'undefined') window.appendLog = appendLog;
 
 export async function onExecute() {
     const keys = state.tickets.reduce((acc, t) => {

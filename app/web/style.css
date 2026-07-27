@@ -118,8 +118,7 @@ main[hidden] {
     gap: 10px;
 }
 .row3 .field.wide {
-    width: auto;
-    flex: 3;
+    grid-column: 2 / -1;
 }
 #block-manual,
 #block-gitlab {
