@@ -1,6 +1,9 @@
 from unittest.mock import MagicMock
 
-from core.jira_client import change_assignee, find_path_to_target, pick_assignee
+from core.jira_client import (
+    change_assignee, find_path_to_target, load_workflow_matrix, pick_assignee,
+    target_status_for,
+)
 
 MATRIX = {
     "Bug": {
@@ -55,4 +58,18 @@ def test_change_assignee_empty_lead_logs_config_warning():
     lines = []
     assert change_assignee(issue, ["t1"], "", log=lines.append) is False
     assert "QA lead not configured" in lines[0]
+    issue.update.assert_not_called()
+
+
+def test_subtask_closes_without_testing_or_reassignment():
+    issue = _issue_with_reporter("tester1")
+    issue.fields.issuetype.name = "Sub-task"
+    target = target_status_for(issue)
+    assert target == "Closed"
+    matrix = load_workflow_matrix()
+    for status in matrix["Sub-task"]:
+        path = find_path_to_target(matrix, "Sub-task", status, target)
+        assert path[-1] == "Closed"
+        assert "Testing" not in path[1:]
+    assert change_assignee(issue, ["tester1"], "lead")
     issue.update.assert_not_called()

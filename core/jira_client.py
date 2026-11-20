@@ -112,6 +112,8 @@ def pick_assignee(issue: Issue, qa_testers: list[str], qa_lead: str) -> str | No
 def change_assignee(issue: Issue, qa_testers: list[str], qa_lead: str,
                     log: Log = print) -> bool:
     try:
+        if issue.fields.issuetype.name == "Sub-task":
+            return True
         if not issue.fields.reporter:
             log(f"  Warning: {issue.key} - no reporter found")
             return False
@@ -128,4 +130,5 @@ def change_assignee(issue: Issue, qa_testers: list[str], qa_lead: str,
 
 
 def target_status_for(issue: Issue) -> str:
-    return "DEV Ready For Testing" if issue.fields.issuetype.name == "Bug" else "Testing"
+    return {"Bug": "DEV Ready For Testing", "Sub-task": "Closed"}.get(
+        issue.fields.issuetype.name, "Testing")

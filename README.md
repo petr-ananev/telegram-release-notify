@@ -8,8 +8,9 @@
 2. Для каждого тикета получается информация через JIRA API (заголовок, статус, reporter)
 3. В зависимости от типа тикета меняется статус используя `core/workflow_matrix.json`:
    - **Bug** → `DEV Ready For Testing`
-   - **Task/Sub-task/Improvement** → `Testing`
-4. Меняется исполнитель (assignee):
+   - **Task/Improvement** → `Testing`
+   - **Sub-task** → `Closed`, текущий исполнитель сохраняется
+4. Для остальных типов задач выбирается исполнитель:
    - Если reporter в списке тестировщиков → назначается на reporter
    - Иначе → назначается на QA lead
 5. Сообщение формируется и отправляется в Telegram-чат
